@@ -1,5 +1,7 @@
 # marcs-observable
 
+[www.npmjs.com/package/marcs-observable](https://www.npmjs.com/package/marcs-observable)
+
 marcs-observable is a TypeScript library that provides a simple and efficient way to create and manage observables. An observable is a stream of values or events that other values can react to. This library allows you to create observables, subscribe to them, and publish changes to them. It also supports computed observables, which are observables that depend on other observables.
 
 ### Installation
