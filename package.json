@@ -1,0 +1,12 @@
+{
+  "name": "marcs-observable",
+  "version": "1.0.2",
+  "description": "a typed version of marc grabanski's observablish-values supporting frontend masters website realtime operations",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "deno test -A test.ts"
+  },
+  "author": "bronifty",
+  "license": "ISC"
+}
