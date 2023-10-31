@@ -52,27 +52,39 @@ const observable = ObservableFactory.create(func);
 
 ### API
 
-#### ObservableFactory.create(initialValue: any, ...args: any[]): IObservable
+```ts
+ObservableFactory.create(initialValue: any, ...args: any[]): IObservable
+```
 
 Creates a new observable. If the initial value is a function, the observable becomes a computed observable. Any extra arguments will be passed to the function.
 
-#### observable.subscribe(handler: (current: any, previous: any) => void): () => void
+```ts
+observable.subscribe(handler: (current: any, previous: any) => void): () => void
+```
 
 Subscribes to the observable. The handler function is called whenever the observable's value changes. The function returns an unsubscribe function.
 
-#### observable.publish(): void
-
-Publishes changes to the observable. This is usually not called directly, but is used internally when the observable's value changes.
-
-#### observable.compute(): void
-
-Recomputes the value of a computed observable. This is usually not called directly, but is used internally when a dependency of the computed observable changes.
-
-#### observable.value: any
+```ts
+observable.value: any
+```
 
 Gets or sets the value of the observable. If the observable is a computed observable, setting the value will not affect the computed function.
 
-#### Observable.delay(ms: number)
+```ts
+observable.publish(): void
+```
+
+Publishes changes to the observable. This is usually not called directly, but is used internally when the observable's value changes.
+
+```ts
+observable.compute(): void
+```
+
+Recomputes the value of a computed observable. This is usually not called directly, but is used internally when a dependency of the computed observable changes.
+
+```ts
+Observable.delay(ms: number)
+```
 
 Returns a promise that resolves after a delay of ms milliseconds. This is used for handling asynchronous computations in computed observables.
 
