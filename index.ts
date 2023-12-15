@@ -1,6 +1,9 @@
 export interface IObservableMethods {
   publish(): void;
-  subscribe(handler: (current: any, previous: any) => void): () => void; // Updated return type
+  subscribe(
+    handler: (current: any, previous: any) => void,
+    signal?: AbortSignal
+  ): () => void; // Updated return type
   push(item: any): void;
   compute(): void;
 }
@@ -94,16 +97,25 @@ export class Observable implements IObservable {
       this.publish();
     }
   }
-  subscribe = (handler: Function) => {
-    if (!this._subscribers.includes(handler)) {
-      this._subscribers.push(handler);
+  subscribe = (handler: Function, signal: AbortSignal) => {
+    if (signal) {
+      const abortHandler = () => {
+        unsubscribe();
+        signal.removeEventListener("abort", abortHandler);
+      };
+      signal.addEventListener("abort", abortHandler, { once: true });
     }
-    return () => {
+    const unsubscribe = () => {
       const index = this._subscribers.indexOf(handler);
       if (index > -1) {
         this._subscribers.splice(index, 1);
       }
     };
+    if (!this._subscribers.includes(handler)) {
+      this._subscribers.push(handler);
+    }
+
+    return unsubscribe;
   };
   publish = () => {
     for (const handler of this._subscribers) {

@@ -212,3 +212,42 @@ Deno.test("cancel stale requests", async () => {
   await promise;
   assertEquals(grandparent.value, 5);
 });
+
+Deno.test("Observable subscribe and unsubscribe with AbortSignal", async () => {
+  const observable1 = ObservableFactory.create(42);
+  const observable2 = ObservableFactory.create("Hello");
+
+  const controller = new AbortController();
+  const { signal } = controller;
+
+  let observable1Value: number | null = null;
+  let observable2Value: string | null = null;
+
+  const unsubscribe1 = observable1.subscribe((current: number) => {
+    observable1Value = current;
+  }, signal);
+
+  const unsubscribe2 = observable2.subscribe((current: string) => {
+    observable2Value = current;
+  }, signal);
+
+  observable1.value = 43;
+  observable2.value = "World";
+
+  // Check that the values have been updated
+  assertEquals(observable1Value, 43);
+  assertEquals(observable2Value, "World");
+
+  controller.abort();
+
+  // Update the values again
+  observable1.value = 44;
+  observable2.value = "Universe";
+
+  // Delay to allow any potential callbacks to be called
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  // Check that the values have not been updated
+  assertEquals(observable1Value, 43);
+  assertEquals(observable2Value, "World");
+});
