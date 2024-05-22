@@ -1,6 +1,6 @@
 {
   "name": "@jsr/bronifty__marcs-observable",
-  "version": "0.1.1",
+  "version": "1.0.5",
   "homepage": "https://jsr.io/@bronifty/marcs-observable",
   "type": "module",
   "dependencies": {},
