@@ -11,7 +11,7 @@ This package is a typescript replica of @marc1's observablish-values package use
 **Install Package**
 
 ```sh
-pnpm add @bronifty/marcs-observable
+pnpm add marcs-observable
 ```
 
 **Code Example**
