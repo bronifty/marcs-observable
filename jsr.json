@@ -1,0 +1,5 @@
+{
+  "name": "@bronifty/marcs-observable",
+  "version": "0.1.1",
+  "exports": "./src/main.ts"
+}

@@ -1,19 +1,16 @@
-export interface IObservableMethods {
-  publish(): void;
+export interface IObservable {
+  // the api surface is value dot (get and set) and subscribe
+  value: any; // accessor methods using dot operator (.value is get and .value= is set)
   subscribe(
     handler: (current: any, previous: any) => void,
     signal?: AbortSignal
-  ): () => void; // Updated return type
-  push(item: any): void;
-  compute(): void;
+  ): () => void; // register an event handler callback function to respond to changes in value property when its set accessor is called
+  // manual methods not really used except for rare cases
+  publish(): void; // publish the current value of the observable to all subscribers
+  push(item: any): void; // add an item to the value property if it is an array
+  compute(): void; // compute the value of the observable
+  _dependencyArray: IObservable[]; // we need this for the static method _computeActive
 }
-
-export type IObservableProperties = {
-  value: any;
-  _dependencyArray: IObservable[];
-};
-
-export type IObservable = IObservableMethods & IObservableProperties;
 
 export class Observable implements IObservable {
   private _value: any;
@@ -52,7 +49,7 @@ export class Observable implements IObservable {
       this._value = init;
     }
   }
-  get value() {
+  get value(): any {
     if (
       Observable._computeActive &&
       Observable._computeActive !== (this as IObservable) &&
@@ -62,7 +59,7 @@ export class Observable implements IObservable {
     }
     return this._value;
   }
-  set value(newVal) {
+  set value(newVal: any) {
     this._previousValue = this._value;
     if (newVal instanceof Promise) {
       this._generationCounter += 1;
@@ -97,7 +94,7 @@ export class Observable implements IObservable {
       this.publish();
     }
   }
-  subscribe = (handler: Function, signal: AbortSignal) => {
+  subscribe = (handler: Function, signal: AbortSignal): (() => void) => {
     if (signal) {
       const abortHandler = () => {
         unsubscribe();
@@ -122,7 +119,7 @@ export class Observable implements IObservable {
       handler(this._value, this._previousValue);
     }
   };
-  computeHandler = () => {
+  computeHandler = (): any => {
     return this.compute();
   };
   compute = () => {
@@ -163,12 +160,12 @@ export class Observable implements IObservable {
       throw new Error("Push can only be called on an observable array.");
     }
   };
-  static delay(ms: number) {
-    let timeoutId: number;
+  static delay(ms: number): any {
+    let timeoutId: ReturnType<typeof setTimeout>;
     const promise = new Promise((resolve) => {
       timeoutId = setTimeout(resolve, ms);
     });
-    const clear = () => clearTimeout(timeoutId);
+    const clear = (): void => clearTimeout(timeoutId);
     return { promise, clear };
   }
 }
@@ -177,4 +174,11 @@ export class ObservableFactory {
   static create(initialValue: any, ...args: any[]): IObservable {
     return new Observable(initialValue, ...args);
   }
+}
+/** marcsObservable is the default export */
+export default function marcsObservable(
+  initialValue: any,
+  ...args: any[]
+): IObservable {
+  return new Observable(initialValue, ...args);
 }

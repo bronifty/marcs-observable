@@ -1,12 +1,14 @@
 {
-  "name": "marcs-observable",
-  "version": "1.0.4",
-  "description": "a typed version of marc grabanski's observablish-values supporting frontend masters website realtime operations",
+  "name": "@jsr/bronifty__marcs-observable",
+  "version": "0.1.1",
+  "homepage": "https://jsr.io/@bronifty/marcs-observable",
   "type": "module",
-  "main": "index.js",
-  "scripts": {
-    "test": "deno test -A test.ts"
+  "dependencies": {},
+  "exports": {
+    ".": {
+      "types": "./_dist/src/main.d.ts",
+      "default": "./src/main.js"
+    }
   },
-  "author": "bronifty",
-  "license": "ISC"
+  "_jsr_revision": 11
 }
