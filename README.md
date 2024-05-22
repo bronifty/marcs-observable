@@ -51,3 +51,7 @@ const App = () => {
 
 export default App;
 ```
+
+# note
+
+- this npm package was originally uploaded to jsr.io and was downloaded from there as-is and re-uploaded to npm
